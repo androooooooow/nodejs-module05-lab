@@ -48,16 +48,38 @@ app.get('/users', (req, res) => {
 });
 
 
+app.get('/users', (req, res) => {
+    res.status(200).json(users);
+});
+
 app.post('/users', (req, res) => {
     const { name } = req.body;
+
+    if (!name || typeof name !== 'string') {
+        return res.status(400).json({
+            error: 'Name is required and must be a string'
+        });
+    }
+    
     const newUser = {
         id: users.length + 1,
-        name: name
+        name: name.trim()
     };
     users.push(newUser);
     res.status(201).json(newUser);
 });
 
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'ok'
+    });
+});
+
+app.use((req, res) => {
+    res.status(404).json({
+        error: 'Route not found'
+    });
+});
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
