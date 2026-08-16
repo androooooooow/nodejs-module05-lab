@@ -31,6 +31,41 @@ let users = [
     }
 ];
 
+//PART 22
+
+let students = [
+    {
+        id: 1,
+        name: 'Ralph Monsalud',
+        course: 'BSIT'
+    },
+    {
+        id: 2,
+        name: 'John Lloyd Prestoza',
+        course: 'BSIT'
+    },
+    {
+        id: 3,
+        name: 'Khen Ashley Limos',
+        course: 'BSIT'
+    },
+    {
+        id: 4,
+        name: 'Allen Dave Barte',
+        course: 'BSIT'
+    },
+    {
+        id: 5,
+        name: 'John Ivan De Guzman',
+        course: 'BSIT'
+    },
+    {
+        id: 6,
+        name: 'Andrew Agojo',
+        course: 'BSIT'
+    }
+];
+
 app.get('/', (req, res) => {
     res.send('Welcome to our API');
 });
@@ -47,9 +82,8 @@ app.get('/users', (req, res) => {
     res.status(200).json(users);
 });
 
-
-app.get('/users', (req, res) => {
-    res.status(200).json(users);
+app.get('/students', (req, res) => {
+    res.status(200).json(students);
 });
 
 app.post('/users', (req, res) => {
@@ -73,6 +107,34 @@ app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'ok'
     });
+});
+
+// PART 22
+
+app.post('/students', (req, res) => {
+    const { name, course } = req.body;
+
+    if (!name || typeof name !== 'string') {
+        return res.status(400).json({
+            error: 'Name is required and must be a string'
+        });
+    }
+
+    if (!course || typeof course !== 'string') {
+        return res.status(400).json({
+            error: 'Course is required and must be a string'
+        });
+    }
+
+    const newStudent = {
+        id: students.length + 1,
+        name: name.trim(),
+        course: course.trim()
+    };
+
+    students.push(newStudent);
+
+    res.status(201).json(newStudent);
 });
 
 app.use((req, res) => {
