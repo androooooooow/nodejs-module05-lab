@@ -31,8 +31,6 @@ let users = [
     }
 ];
 
-//PART 22
-
 let students = [
     {
         id: 1,
@@ -70,13 +68,11 @@ app.get('/', (req, res) => {
     res.send('Welcome to our API');
 });
 
-
 app.get('/about', (req, res) => {
     res.json({
         message: 'This is the first Express API of Group 3 of SYSDEV03-1'
     });
 });
-
 
 app.get('/users', (req, res) => {
     res.status(200).json(users);
@@ -109,20 +105,18 @@ app.get('/health', (req, res) => {
     });
 });
 
-// PART 22
+app.use((req, res) => {
+    res.status(404).json({
+        error: 'Route not found'
+    });
+});
 
 app.post('/students', (req, res) => {
     const { name, course } = req.body;
 
-    if (!name || typeof name !== 'string') {
+    if (!name || !course) {
         return res.status(400).json({
-            error: 'Name is required and must be a string'
-        });
-    }
-
-    if (!course || typeof course !== 'string') {
-        return res.status(400).json({
-            error: 'Course is required and must be a string'
+            error: 'Name and course are required'
         });
     }
 
@@ -133,14 +127,7 @@ app.post('/students', (req, res) => {
     };
 
     students.push(newStudent);
-
     res.status(201).json(newStudent);
-});
-
-app.use((req, res) => {
-    res.status(404).json({
-        error: 'Route not found'
-    });
 });
 
 app.listen(PORT, () => {
